@@ -1,8 +1,26 @@
 from bs4 import BeautifulSoup;
-import requests;
+import cfscrape;
 
-url = 'https://www.1377x.to/torrent/4931612/The-Spy-Who-Loved-Me-1977-1080p-BluRay-10bit-x265-HazMatt-mkv/'
-page = requests.get(url)
+domain = 'https://1337x.to/'
+
+#input here
+#this takes a search query as input and searches for it, then it returns the first movie link it finds
+def takeInput(search_query):
+    scraper = cfscrape.create_scraper(delay=10)
+    search_query = search_query.strip().replace(' ','+')
+    search_url = domain+'search/'+search_query+'/1/'
+    print(search_url)
+    results = scraper.get(search_url)
+    search_soup = BeautifulSoup(results.content,'html.parser')
+    a = search_soup.find('td',attrs={'class': 'coll-1 name'})
+    for links in a.find_all('a'):
+        if links.get('href').startswith('/torrent'):
+            movie_url = domain+links.get('href')[1:]
+    return movie_url
+
+url = takeInput(input('Enter query: '))
+scraper = cfscrape.create_scraper()
+page = scraper.get(url)
 
 soup = BeautifulSoup(page.content,'html.parser')
 #magnet and download
@@ -38,4 +56,3 @@ for a in soup.find_all('div',attrs={'class': 'torrent-detail-info'}):
         genres.append(genre.text.strip())
     #description
     desc = a.p.text.strip()
-
