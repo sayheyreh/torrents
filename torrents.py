@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup,SoupStrainer;
 import cfscrape;
+import json
 
 domain = 'https://1337x.to/'
 
@@ -34,17 +35,19 @@ if url != None:
         if link.get('href').startswith('magnet'):
             magnet = link.get('href')
         #download
-        elif link.get('href').startswith('/download'):
-            download_link = url+link.get('href')[1:]
-
+        elif '.torrent' in link.get('href'):
+            download_link = link.get('href')
     #hash info
     info_hash = soup.find('div', attrs={'class': 'infohash-box'}).span.text
 
     #screenshots
-    screenshots = []
-    for src in soup.find_all('img', attrs={'class': 'img-responsive descrimg'}):
-        screenshots.append(src.get('src'))
-
+    try:
+        screenshots = []
+        for src in soup.find_all('img', attrs={'class': 'img-responsive descrimg'}):
+            screenshots.append(src.get('src'))
+    except AttributeError:
+        print('no screenshots')
+        
     #cover image
     a = soup.find('div',attrs={'class':'torrent-image'})
     cover_img = a.find('img').get('src')
@@ -65,3 +68,16 @@ if url != None:
     text_remove = soup.find('div',attrs={'id':'description'}).strong.text
     summary = summary.replace(text_remove,'')
 
+
+    vars = {
+        'title' : title,
+        'description' : desc,
+        'genres' : genres,
+        'summary': summary,
+        'hash-info' : info_hash,
+        'screenshots' : screenshots,
+        'magnet' : magnet,
+        'download' : download_link 
+    }
+    y = json.dumps(vars)
+    print(y)
