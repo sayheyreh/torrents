@@ -38,7 +38,7 @@ def index():
         url = takeInput(query)
     return render_template('index.html')
 
-@app.route('/<query>',method=('POST','GET'))
+@app.route('/<query>',methods=('POST','GET'))
 def search_torrent(query):
     url=takeInput(query)
     return jsonify(get_json(url))
