@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import cfscrape;
-import json
 from flask import Flask,render_template,request,jsonify
 
 app = Flask(__name__)
