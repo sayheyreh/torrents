@@ -1,1 +1,1 @@
-web: gunicorn torrents.py:app
+web: gunicorn torrents:app
