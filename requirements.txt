@@ -1,6 +1,5 @@
 beautifulsoup4
 requests
 flask
-json
 cfscrape
 gunicorn
