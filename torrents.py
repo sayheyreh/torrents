@@ -133,4 +133,5 @@ def get_json(url):
         }
         return vars
     return {'error':'movie not found'}
-app.run()
+if __name__ == '__main__':
+    app.run()
