@@ -36,10 +36,12 @@ def index():
     if request.method=='POST':
         query = request.form.get('query')
         url = takeInput(query)
-        return jsonify(get_json(url))
     return render_template('index.html')
 
-    
+@app.route('/<query>',method=('POST','GET'))
+def search_torrent(query):
+    url=takeInput(query)
+    return jsonify(get_json(url))
 
 def get_json(url):
     if url != None:
